@@ -26,8 +26,9 @@ function makeNewGameState() {
         numClicks: 0,
         selectedCard: [],
         ignoreClick: false,
-    }
+    };
 }
+
 class MemoryGame extends React.Component {
     constructor(props) {
         super(props);
@@ -41,7 +42,7 @@ class MemoryGame extends React.Component {
         let currentCard = this.state.cards[cardId];
 
         if (!currentCard.matched && !currentCard.reveal) {
-            newNumClicks = newNumClicks + 1
+            newNumClicks = newNumClicks + 1;
         }
 
         let newSelectedCard = Object.assign({}, this.state.selectedCard);
@@ -51,16 +52,16 @@ class MemoryGame extends React.Component {
         if (this.state.selectedCard.length) {
             this.setState({ ignoreClick: true });
             if (this.state.cards[this.state.selectedCard[0]].letter === currentCard.letter) {
-                newCards[cardId].matched = true
-                newCards[this.state.selectedCard[0]].matched = true
+                newCards[cardId].matched = true;
+                newCards[this.state.selectedCard[0]].matched = true;
                 this.setState({
                     cards: newCards
                 });
 
             }
             setTimeout(() => {
-                newCards[cardId].reveal = false
-                newCards[newSelectedCard[0]].reveal = false
+                newCards[cardId].reveal = false;
+                newCards[newSelectedCard[0]].reveal = false;
                 this.setState({
                     cards: newCards,
                     ignoreClick: false,
@@ -68,10 +69,10 @@ class MemoryGame extends React.Component {
                 })
             }, 1000);
         } else {
-            newSelectedCard = [cardId]
+            newSelectedCard = [cardId];
         }
-        newCards[cardId].reveal = true
-        newCards[newSelectedCard[0]].reveal = true
+        newCards[cardId].reveal = true;
+        newCards[newSelectedCard[0]].reveal = true;
         this.setState({
             numClicks: newNumClicks,
             cards: newCards,
@@ -102,7 +103,7 @@ class MemoryGame extends React.Component {
 
 function Card(props) {
     const { reveal, matched, letter, onclick, id } = props;
-    const defaultClassNames = "col-3 card "
+    const defaultClassNames = "col-3 card ";
     const extraClassName = matched ? "bg-success" : "";
     const newClassNames = defaultClassNames.concat(extraClassName);
     return (
