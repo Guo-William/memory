@@ -3,20 +3,13 @@
 @import "bootstrap";
 
 .side { padding: 4ex; text-align: center; }
-h1 { text-align: center; }
+h1, h2 { text-align: center; }
 
-.card {
+.tile {
     background: #fff;
-    border: 1px solid;
-    border-color: inherit;
-    float: left;
-    font-size: 24px;
-    font-weight: bold;
-    line-height: 34px;
-    margin-right: -1px;
-    margin-top: -1px;
+    border: 1px solid #999;
+    height: 60px;
     padding: 0;
     text-align: center;
-    height: 100px;
-    width: 100px;
+    width: 20px;
 }
