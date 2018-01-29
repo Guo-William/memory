@@ -6,18 +6,17 @@ export default function run_game(root) {
     ReactDOM.render(<MemoryGame />, root);
 }
 
-const letters = ["A", "B", "C", "D", "E", "F", "G", "H",
-    "A", "B", "C", "D", "E", "F", "G", "H"];
+const letters = ["A", "B", "C", "D", "E", "F", "G", "H"];
 
 function getRandomCards() {
-    const shuffledLetters = _.shuffle(letters);
+    const shuffledLetters = _.shuffle(letters.concat(letters));
     const arrayCards = _.map(shuffledLetters, (letter, index) => ({
         id: index,
         letter,
         reveal: false,
         matched: false,
     }));
-    return _.object([...letters.keys()], arrayCards);
+    return _.object([...shuffledLetters.keys()], arrayCards);
 }
 
 function makeNewGameState() {
@@ -34,30 +33,34 @@ class MemoryGame extends React.Component {
         super(props);
         this.state = makeNewGameState();
     }
+
     toggleReveal(cardId) {
-        if (this.state.ignoreClick || this.state.cards[cardId].matched || this.state.cards[cardId].reveal) {
+        const ignoreClick = this.state.ignoreClick;
+        const cards = this.state.cards;
+        const currentCard = cards[cardId];
+        const selectedCard = this.state.selectedCard;
+
+        if (ignoreClick || currentCard.matched || currentCard.reveal) {
             return;
         }
         let newNumClicks = this.state.numClicks;
-        let currentCard = this.state.cards[cardId];
 
         if (!currentCard.matched && !currentCard.reveal) {
             newNumClicks = newNumClicks + 1;
         }
 
-        let newSelectedCard = Object.assign({}, this.state.selectedCard);
+        let newSelectedCard = Object.assign({}, selectedCard);
+        let newCards = Object.assign({}, cards);
 
-        let newCards = Object.assign({}, this.state.cards);
-
-        if (this.state.selectedCard.length) {
+        if (selectedCard.length) {
             this.setState({ ignoreClick: true });
-            if (this.state.cards[this.state.selectedCard[0]].letter === currentCard.letter) {
+
+            if (cards[selectedCard[0]].letter === currentCard.letter) {
                 newCards[cardId].matched = true;
-                newCards[this.state.selectedCard[0]].matched = true;
+                newCards[selectedCard[0]].matched = true;
                 this.setState({
                     cards: newCards
                 });
-
             }
             setTimeout(() => {
                 newCards[cardId].reveal = false;
@@ -86,15 +89,19 @@ class MemoryGame extends React.Component {
             return <Card key={index} {...card} onclick={toggleReveal} />
         });
         return (
-            <div className="row">
+            <div>
                 <div className="row">
-                    {cardList}
+                    <div className="col-4" />
+                    <div className="col-4">
+                        {cardList}
+                    </div>
+                    <div className="col-4" />
                 </div>
-                <div className="col-12">
+                <div className="row">
                     <h2 className="text-center">clicks: {this.state.numClicks}</h2>
                 </div>
-                <div className="col-12 text-center">
-                    <Button onClick={() => this.setState(makeNewGameState())}>Reset</Button>
+                <div className="row">
+                    <Button className="text-center" onClick={() => this.setState(makeNewGameState())}>Reset</Button>
                 </div>
             </div>
         );
@@ -106,6 +113,7 @@ function Card(props) {
     const defaultClassNames = "col-3 card ";
     const extraClassName = matched ? "bg-success" : "";
     const newClassNames = defaultClassNames.concat(extraClassName);
+
     return (
         <div className={newClassNames} onClick={() => onclick(id)}>
             {reveal || matched ? letter : ""}
