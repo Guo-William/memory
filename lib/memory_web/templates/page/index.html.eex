@@ -1,8 +1,25 @@
 <h1>Memory Game</h1>
 
-<div id="game">
-  Loading...
+<div class="row">
+  <div class="col">
+    <h1 id="index-page">Join a Game</h1>
+    <p class="center-paragraph"><a href="#" id="joinLink" onClick="clickJoin()">Join</a></p>
+  </div>
 </div>
+
+<script>
+  function clickJoin() {
+    var gameName = document.getElementById('gameName').value;
+    if(gameName === "") {
+      return
+    }
+    <%# Attribution https://stackoverflow.com/questions/4689344/how-can-i-add-href-attribute-to-a-link-dynamically-using-javascript %>
+    var a = document.getElementById('joinLink');
+    a.href = "/game/" + gameName
+  }
+</script>
+
+
 
 
 

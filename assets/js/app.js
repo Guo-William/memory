@@ -12,6 +12,7 @@
 // If you no longer want to use a dependency, remember
 // to also remove its path from "config.paths.watched".
 import "phoenix_html";
+import socket from "./socket";
 
 // Import local files
 //
@@ -20,13 +21,20 @@ import "phoenix_html";
 
 // import socket from "./socket"
 
-import run_game from "./memoryGame";
+import run_game, { form_init } from "./memoryGame";
 
 function init() {
   let root = document.getElementById('game');
-  run_game(root);
+  if (root) {
+    let channel = socket.channel("games:" + window.gameName, {});
+    run_game(root, channel);
+  }
+
+  if (document.getElementById('index-page')) {
+    form_init(document.getElementById('index-page'));
+  }
+  // run_game(root);
 }
 
 // Use jQuery to delay until page loaded.
 $(init);
-
