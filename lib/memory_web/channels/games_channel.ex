@@ -5,7 +5,7 @@ defmodule MemoryWeb.GamesChannel do
 
   def join("games:" <> name, payload, socket) do
     if authorized?(payload) do
-      game = Game.new()
+      game = Memory.GameBackup.load(name) || Game.new()
 
       socket =
         socket
@@ -22,6 +22,7 @@ defmodule MemoryWeb.GamesChannel do
   # by sending replies to requests from the client
   def handle_in("click", %{"clickedIndex" => cardIndex}, socket) do
     game = Game.handleClick(socket.assigns[:game], cardIndex)
+    Memory.GameBackup.save(socket.assigns[:name], game)
     socket = assign(socket, :game, game)
     {:reply, {:ok, %{"game" => game}}, socket}
   end
