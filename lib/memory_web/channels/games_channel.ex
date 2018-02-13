@@ -23,13 +23,19 @@ defmodule MemoryWeb.GamesChannel do
   def handle_in("click", %{"clickedIndex" => cardIndex}, socket) do
     game = Game.handleClick(socket.assigns[:game], cardIndex)
     socket = assign(socket, :game, game)
-    {:reply, {:ok, %{"game" => Game.client_view(game)}}, socket}
+    {:reply, {:ok, %{"game" => game}}, socket}
   end
 
   def handle_in("reset", %{"reset" => reset}, socket) do
     game = Game.new()
     socket = assign(socket, :game, game)
-    {:reply, {:ok, %{"game" => Game.client_view(game)}}, socket}
+    {:reply, {:ok, %{"game" => game}}, socket}
+  end
+
+  def handle_in("unpause", %{"unpause" => unpause}, socket) do
+    game = Game.unpause(socket.assigns[:game])
+    socket = assign(socket, :game, game)
+    {:reply, {:ok, %{"game" => game}}, socket}
   end
 
   # Add authorization logic here as required.
