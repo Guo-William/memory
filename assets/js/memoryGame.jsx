@@ -32,10 +32,9 @@ class MemoryGame extends React.Component {
             .receive("error", resp => { console.log("Unable to join", resp); });
 
     }
-    // Copied from Nat Tuck Repo
-    gotView(view) {
-        console.log("New view", view);
-        this.setState(view.game);
+    // Copied from Nat Tuck Repo but modified to deconstruct the object
+    gotView({ game }) {
+        this.setState(game);
     }
     // Copied from Nat Tuck Repo
     sendClick(cardId) {
@@ -46,14 +45,14 @@ class MemoryGame extends React.Component {
     }
 
     sendResetReq() {
-        this.channel.push("reset", { reset: true })
+        this.channel.push("reset")
             .receive("ok", this.gotView.bind(this));
     }
 
     componentDidUpdate(pp, ps) {
         if (this.state.ignoreClick) {
             setTimeout(() => {
-                this.channel.push("unpause", { unpause: true })
+                this.channel.push("unpause")
                     .receive("ok", this.gotView.bind(this));
             }, 1000);
         }

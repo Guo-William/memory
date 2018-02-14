@@ -1,3 +1,4 @@
+# Boiler code from https://github.com/NatTuck/hangman2/tree/proc-state
 defmodule Memory.GameBackup do
   use Agent
 

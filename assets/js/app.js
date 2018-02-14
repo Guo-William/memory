@@ -33,7 +33,6 @@ function init() {
   if (document.getElementById('index-page')) {
     form_init(document.getElementById('index-page'));
   }
-  // run_game(root);
 }
 
 // Use jQuery to delay until page loaded.

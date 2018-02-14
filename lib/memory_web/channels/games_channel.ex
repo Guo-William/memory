@@ -4,6 +4,7 @@ defmodule MemoryWeb.GamesChannel do
   alias Memory.Game
 
   def join("games:" <> name, payload, socket) do
+    # Boiler code from https://github.com/NatTuck/hangman2/tree/proc-state
     if authorized?(payload) do
       game = Memory.GameBackup.load(name) || Game.new()
 
@@ -20,6 +21,7 @@ defmodule MemoryWeb.GamesChannel do
 
   # Channels can be used in a request/response fashion
   # by sending replies to requests from the client
+  # Boiler code from https://github.com/NatTuck/hangman2/tree/proc-state
   def handle_in("click", %{"clickedIndex" => cardIndex}, socket) do
     game = Game.handleClick(socket.assigns[:game], cardIndex)
     Memory.GameBackup.save(socket.assigns[:name], game)
@@ -27,13 +29,13 @@ defmodule MemoryWeb.GamesChannel do
     {:reply, {:ok, %{"game" => game}}, socket}
   end
 
-  def handle_in("reset", %{"reset" => reset}, socket) do
+  def handle_in("reset", %{}, socket) do
     game = Game.new()
     socket = assign(socket, :game, game)
     {:reply, {:ok, %{"game" => game}}, socket}
   end
 
-  def handle_in("unpause", %{"unpause" => unpause}, socket) do
+  def handle_in("unpause", %{}, socket) do
     game = Game.unpause(socket.assigns[:game])
     socket = assign(socket, :game, game)
     {:reply, {:ok, %{"game" => game}}, socket}
